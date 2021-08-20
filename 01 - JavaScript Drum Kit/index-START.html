@@ -56,21 +56,39 @@
     <audio data-key="76" src="sounds/tink.wav"></audio>
 
     <script>
-      const keys = document.querySelectorAll(".key");
-      const audioFiles = document.querySelectorAll("audio");
-      console.log(keys);
-      console.log(audioFiles);
+      const keys = Array.from(document.querySelectorAll(".key"));
+      const audioElems = Array.from(document.querySelectorAll("audio"));
+      // console.log(keys);
+      // console.log(audioElems);
 
-      keys.forEach((key) =>
-        key.addEventListener("click", function (e) {
-          const dataKey = e.target.parentElement.dataset.key;
-          playAudio(dataKey);
-          // key.addEvent
-          // autoplay
-        })
-      );
+      const addStyle = (keyCode) => {
+        const theChosenKey = keys.filter((key) => key.dataset.key == keyCode);
+        theChosenKey[0].classList.add("playing");
+      };
 
-      const
+      const removeStyle = (keyCode) => {
+        const theChosenKey = keys.filter((key) => key.dataset.key == keyCode);
+        theChosenKey[0].classList.remove("playing");
+      };
+
+      const playAudio = function (keyCode) {
+        const soundToPlay = audioElems.filter(
+          (el) => el.dataset.key == keyCode
+        );
+        // console.log(soundToPlay[0]);
+        soundToPlay[0].load();
+        soundToPlay[0].play();
+      };
+
+      document.addEventListener("keydown", function (e) {
+        let keyCode = e.keyCode;
+        addStyle(keyCode);
+        playAudio(keyCode);
+      });
+
+      document.addEventListener("keyup", function (e) {
+        removeStyle(e.keyCode);
+      });
     </script>
   </body>
 </html>
